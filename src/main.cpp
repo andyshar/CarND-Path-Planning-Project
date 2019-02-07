@@ -11,6 +11,7 @@
 
 // for convenience
 using nlohmann::json;
+using namespace std;
 using std::string;
 using std::vector;
 
