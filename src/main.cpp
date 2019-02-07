@@ -95,9 +95,6 @@ int main() {
 
           json msgJson;
 
-          vector<double> next_x_vals;
-          vector<double> next_y_vals;
-
           int previous_path_size = previous_path_x.size();
           if (previous_path_size > 0) {
               car_s = end_path_s;
@@ -171,7 +168,6 @@ int main() {
             
           // Check previous points
           if ( previous_path_size < 2 ) {
-              // There are not too many...
               double prev_car_x = car_x - cos(car_yaw);
               double prev_car_y = car_y - sin(car_yaw);
               
