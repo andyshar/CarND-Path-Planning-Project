@@ -131,7 +131,7 @@ int main() {
               if (my_car_lane == lane && my_car_s - car_s > 0 && my_car_s - car_s < safe_distance) {
                   has_car_ahead = true;
                   cout << "A car ahead !" << endl;
-              } else if(lane - my_car_lane > 0 && (car_s - my_car_s < safe_distance && car_s - my_car_s > -safe_distance)) {
+              } else if (lane - my_car_lane > 0 && (car_s - my_car_s < safe_distance && car_s - my_car_s > -safe_distance)) {
                   has_car_left = true;
                   cout << "A car at left !" << endl;
               } else if (lane - my_car_lane < 0 && (car_s - my_car_s < safe_distance && car_s - my_car_s > -safe_distance)) {
@@ -150,10 +150,10 @@ int main() {
                   lane++;
                   cout << "Lane change : " << lane << endl;
               } else {
-                  ref_vel -= 0.3;
+                  ref_vel -= 0.32;
               }
           } else if ( ref_vel < 49.5) {
-              ref_vel += 0.3;
+              ref_vel += 0.32;
               cout << "Ref vel : " << ref_vel << endl;
           }
 
@@ -234,7 +234,7 @@ int main() {
               next_y_vals.push_back(previous_path_y[i]);
           }
           
-          // Calculate distance y position on 30m ahead.
+          // Calculate distance y position on 30 meters ahead.
           double target_x = 30.0;
           double target_y = s(target_x);
           double target_dist = sqrt(target_x*target_x + target_y*target_y);
@@ -243,7 +243,7 @@ int main() {
           
           for (int i=0; i < 50 - previous_path_size; i++) {
               
-              double N = target_dist / (0.02 * ref_vel / 2.3);
+              double N = target_dist / (0.02 * ref_vel / 3.2);
               double x_point = x_add_on + (target_x)/N;
               double y_point = s(x_point);
               
