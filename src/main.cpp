@@ -135,7 +135,7 @@ int main() {
               } else if(lane - my_car_lane > 0 && (car_s - my_car_s < safe_distance && car_s - my_car_s > -safe_distance)) {
                   has_car_left = true;
                   cout << "A car at left !" << endl;
-              } else if (lane - my_car_lane < 0 && (car_s - my_car_s < safe_distance && car_s - my_car_s > -safe_distance >)) {
+              } else if (lane - my_car_lane < 0 && (car_s - my_car_s < safe_distance && car_s - my_car_s > -safe_distance)) {
                   has_car_right = true;
                   cout << "A car at right !" << endl;
               }
