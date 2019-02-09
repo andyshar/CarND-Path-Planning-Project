@@ -150,10 +150,10 @@ int main() {
                   lane++;
                   cout << "Lane change : " << lane << endl;
               } else {
-                  ref_vel -= 0.2;
+                  ref_vel -= 0.22;
               }
-          } else if ( ref_vel < 49.6) {
-              ref_vel += 0.2;
+          } else if ( ref_vel < 49.5) {
+              ref_vel += 0.22;
               cout << "Ref vel : " << ref_vel << endl;
           }
 
@@ -243,7 +243,7 @@ int main() {
           
           for (int i=0; i < 50 - previous_path_size; i++) {
               
-              double N = target_dist / (0.02 * ref_vel / 2);
+              double N = target_dist / (0.02 * ref_vel / 2.2);
               double x_point = x_add_on + (target_x)/N;
               double y_point = s(x_point);
               
