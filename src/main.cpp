@@ -95,6 +95,8 @@ int main() {
 
           json msgJson;
 
+          // #################### my code begin ####################
+
           int previous_path_size = previous_path_x.size();
           if (previous_path_size > 0) {
               car_s = end_path_s;
@@ -109,9 +111,9 @@ int main() {
           
               if (d > 0 && d < 4) {
                   my_car_lane = 0;
-              } else if (d > 4 && d < 8){
+              } else if (d > 4 && d < 8) {
                   my_car_lane = 1;
-              }else if(d > 8 && d < 12){
+              }else if(d > 8 && d < 12) {
                   my_car_lane = 2;
               }
               
@@ -122,16 +124,18 @@ int main() {
               double my_car_s = sensor_fusion[i][5];
               // If using the previous point
               my_car_s += previous_path_size * 0.02 * check_speed;
+              // Safe distance (about my car runs 3 seconds )
+              double safe_distance = check_speed * 3;
 
               // Check a car is ahead or not
               cout << "my_car_lane : " << my_car_lane << endl;
-              if (my_car_lane == lane && my_car_s > car_s && my_car_s - car_s < 30) {
+              if (my_car_lane == lane && my_car_s - car_s > 0 && my_car_s - car_s < safe_distance) {
                   has_car_ahead = true;
                   cout << "A car ahead !" << endl;
-              } else if(lane - my_car_lane > 0 && (car_s - 30 < my_car_s && car_s + 30 > my_car_s)){
+              } else if(lane - my_car_lane > 0 && (car_s - my_car_s < safe_distance && car_s - my_car_s > -safe_distance)) {
                   has_car_left = true;
                   cout << "A car at left !" << endl;
-              } else if (lane - my_car_lane < 0 && (car_s - 30 < my_car_s && car_s + 30 > my_car_s)){
+              } else if (lane - my_car_lane < 0 && (car_s - my_car_s < safe_distance && car_s - my_car_s > -safe_distance >)) {
                   has_car_right = true;
                   cout << "A car at right !" << endl;
               }
@@ -143,21 +147,25 @@ int main() {
               if (!has_car_left && lane > 0) {
                   lane--;
                   cout << "Lane change : " << lane << endl;
-              } else if (!has_car_right && lane < 2){
+              } else if (!has_car_right && lane < 2) {
                   lane++;
                   cout << "Lane change : " << lane << endl;
               } else {
-                  ref_vel -= 0.224;
+                  ref_vel -= 0.2;
               }
-          } else if ( ref_vel < 49.5){
-              ref_vel += 0.224;
+          } else if ( ref_vel < 49.6) {
+              ref_vel += 0.2;
               cout << "Ref vel : " << ref_vel << endl;
           }
+
+          // #################### my code end ####################
 
           /**
            * TODO: define a path made up of (x,y) points that the car will visit
            *   sequentially every .02 seconds
            */
+
+          // #################### my code begin ####################
 
           vector<double> points_x;
           vector<double> points_y;
@@ -236,7 +244,7 @@ int main() {
           
           for (int i=0; i < 50 - previous_path_size; i++) {
               
-              double N = target_dist / (0.02 * ref_vel / 2.24);
+              double N = target_dist / (0.02 * ref_vel / 2);
               double x_point = x_add_on + (target_x)/N;
               double y_point = s(x_point);
               
@@ -254,6 +262,7 @@ int main() {
                 
           }
 
+          // #################### my code end ####################
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
