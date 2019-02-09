@@ -235,8 +235,7 @@ int main() {
           }
           
           // Calculate distance y position on 30m ahead.
-          // double target_x = 30.0;
-          double target_x = safe_distance;
+          double target_x = 30.0;
           double target_y = s(target_x);
           double target_dist = sqrt(target_x*target_x + target_y*target_y);
           
