@@ -124,8 +124,7 @@ int main() {
               double my_car_s = sensor_fusion[i][5];
               // If using the previous point
               my_car_s += previous_path_size * 0.02 * check_speed;
-              // Safe distance (about my car runs 3 seconds )
-              double safe_distance = check_speed * 3;
+              double safe_distance = 30;
 
               // Check a car is ahead or not
               cout << "my_car_lane : " << my_car_lane << endl;
@@ -236,7 +235,8 @@ int main() {
           }
           
           // Calculate distance y position on 30m ahead.
-          double target_x = 30.0;
+          // double target_x = 30.0;
+          double target_x = safe_distance;
           double target_y = s(target_x);
           double target_dist = sqrt(target_x*target_x + target_y*target_y);
           
