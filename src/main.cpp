@@ -102,10 +102,12 @@ int main() {
               car_s = end_path_s;
           }
           
+          double min_safe_s = 30;
           bool has_car_ahead = false;
           bool has_car_left = false;
           bool has_car_right = false;
           int my_car_lane = 0;
+
           for (int i=0; i < sensor_fusion.size(); i++) {
               float d = sensor_fusion[i][6];
           
@@ -124,17 +126,16 @@ int main() {
               double my_car_s = sensor_fusion[i][5];
               // If using the previous point
               my_car_s += previous_path_size * 0.02 * check_speed;
-              double safe_distance = 30;
 
               // Check a car is ahead or not
               cout << "my_car_lane : " << my_car_lane << endl;
-              if (my_car_lane == lane && my_car_s - car_s > 0 && my_car_s - car_s < safe_distance) {
+              if (my_car_lane == lane && my_car_s - car_s > 0 && my_car_s - car_s < min_safe_s) {
                   has_car_ahead = true;
                   cout << "A car ahead !" << endl;
-              } else if (lane - my_car_lane > 0 && (car_s - my_car_s < safe_distance && car_s - my_car_s > -safe_distance)) {
+              } else if (lane - my_car_lane > 0 && (car_s - my_car_s < min_safe_s && car_s - my_car_s > -min_safe_s)) {
                   has_car_left = true;
                   cout << "A car at left !" << endl;
-              } else if (lane - my_car_lane < 0 && (car_s - my_car_s < safe_distance && car_s - my_car_s > -safe_distance)) {
+              } else if (lane - my_car_lane < 0 && (car_s - my_car_s < min_safe_s && car_s - my_car_s > -min_safe_s)) {
                   has_car_right = true;
                   cout << "A car at right !" << endl;
               }
@@ -243,7 +244,7 @@ int main() {
           
           for (int i=0; i < 50 - previous_path_size; i++) {
               
-              double N = target_dist / (0.02 * ref_vel / 3.2);
+              double N = target_dist / (0.02 * ref_vel / 2.3);
               double x_point = x_add_on + (target_x)/N;
               double y_point = s(x_point);
               
