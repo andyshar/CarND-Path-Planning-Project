@@ -1,6 +1,34 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
-   
+
+### The Model
+In this project I decided to mimic state behavior by using 3 flags:
+- `has_car_ahead`
+- `has_car_left`
+- `has_car_right`
+
+When the code detects that it is going to hit car which it is following it sets the flag `has_car_ahead` to `true`. It is done by calculating our car and potential collision car position, when our future position reaches the other car we should be alarmed. When such situation occurs 2 things happens:
+- car slows
+- car checks if it is able to change lane
+
+Checking possibility of changing lane is made by checking data from sensor fusion about other cars and finding if they are on collision curse with our lane changing. The rules is that if there are cars on the near lane within 30 meters, it is not safe to take the turn.
+
+In such situation, the cars keeps the lane and just slows down in order not to hit followed car.
+But when any of flags in `has_car_left` and `has_car_right` is set to `false`, the car will make lane change, and whole process will work again.
+
+### Smoothening trajectory
+
+To avoid to sharp turns, `spline` library is used to generate smooth trajectory. In order to generate trajectory, I use previous point as well as new ones which are in 3 step ahead:
+- 30 units
+- 60 units
+- 90 units
+
+It is important that this trajectory takes into consideration our lane position because new points should be positioned in the correct lane.
+
+### Acceleration jerk
+
+In order to avoid this type of problem, I decided to gradually change the speed of the car depending on situation. When car cannot make a lane change, it adjusts speed for the current lane, but when situation is better, it accelerates up to desired speed `49.5`.
+
 ### Simulator.
 You can download the Term3 Simulator which contains the Path Planning Project from the [releases tab (https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2).  
 
@@ -43,13 +71,13 @@ Here is the data provided from the Simulator to the C++ Program
 #### Previous path data given to the Planner
 
 //Note: Return the previous list but with processed points removed, can be a nice tool to show how far along
-the path has processed since last time. 
+the path has processed since last time.
 
 ["previous_path_x"] The previous list of x points previously given to the simulator
 
 ["previous_path_y"] The previous list of y points previously given to the simulator
 
-#### Previous path's end s and d values 
+#### Previous path's end s and d values
 
 ["end_path_s"] The previous list's last point's frenet s value
 
@@ -57,7 +85,7 @@ the path has processed since last time.
 
 #### Sensor Fusion Data, a list of all other car's attributes on the same side of the road. (No Noise)
 
-["sensor_fusion"] A 2d vector of cars and then that car's [car's unique ID, car's x position in map coordinates, car's y position in map coordinates, car's x velocity in m/s, car's y velocity in m/s, car's s position in frenet coordinates, car's d position in frenet coordinates. 
+["sensor_fusion"] A 2d vector of cars and then that car's [car's unique ID, car's x position in map coordinates, car's y position in map coordinates, car's x velocity in m/s, car's y velocity in m/s, car's s position in frenet coordinates, car's d position in frenet coordinates.
 
 ## Details
 
@@ -68,6 +96,10 @@ the path has processed since last time.
 ## Tips
 
 A really helpful resource for doing this project and creating smooth trajectories was using http://kluge.in-chemnitz.de/opensource/spline/, the spline function is in a single hearder file is really easy to use.
+
+## Reflection
+
+
 
 ---
 
@@ -87,7 +119,7 @@ A really helpful resource for doing this project and creating smooth trajectorie
   * Run either `install-mac.sh` or `install-ubuntu.sh`.
   * If you install from source, checkout to commit `e94b6e1`, i.e.
     ```
-    git clone https://github.com/uWebSockets/uWebSockets 
+    git clone https://github.com/uWebSockets/uWebSockets
     cd uWebSockets
     git checkout e94b6e1
     ```
@@ -142,4 +174,3 @@ still be compilable with cmake and make./
 
 ## How to write a README
 A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
-
