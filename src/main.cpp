@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <math.h>
 #include "Eigen-3.3/Eigen/Core"
 #include "Eigen-3.3/Eigen/QR"
 #include "helpers.h"
@@ -106,42 +107,40 @@ int main() {
           bool has_car_ahead = false;
           bool has_car_left = false;
           bool has_car_right = false;
-          int my_car_lane = 0;
+          int check_car_lane = 0;
 
           for (int i=0; i < sensor_fusion.size(); i++) {
               float d = sensor_fusion[i][6];
           
               if (d > 0 && d < 4) {
-                  my_car_lane = 0;
+                  check_car_lane = 0;
               } else if (d > 4 && d < 8) {
-                  my_car_lane = 1;
+                  check_car_lane = 1;
               }else if(d > 8 && d < 12) {
-                  my_car_lane = 2;
+                  check_car_lane = 2;
               }
               
               // check car in lane
               double vx = sensor_fusion[i][3];
               double vy = sensor_fusion[i][4];
               double check_speed = sqrt(vx*vx + vy*vy);
-              double my_car_s = sensor_fusion[i][5];
+              double check_car_s = sensor_fusion[i][5];
               // If using the previous point
-              my_car_s += previous_path_size * 0.02 * check_speed;
+              check_car_s += previous_path_size * 0.02 * check_speed;
 
-              // Check a car is ahead or not
-              cout << "my_car_lane : " << my_car_lane << endl;
-              if (my_car_lane == lane && my_car_s - car_s > 0 && my_car_s - car_s < min_safe_s) {
+              // Check if a car is ahead or not
+              if (check_car_lane == lane && check_car_s - car_s > 0 && check_car_s - car_s < min_safe_s) {
                   has_car_ahead = true;
                   cout << "A car ahead !" << endl;
-              } else if (lane - my_car_lane > 0 && (car_s - my_car_s < min_safe_s && car_s - my_car_s > -min_safe_s)) {
+              } else if (check_car_lane < lane && fabs(check_car_s - car_s) < min_safe_s) {
                   has_car_left = true;
                   cout << "A car at left !" << endl;
-              } else if (lane - my_car_lane < 0 && (car_s - my_car_s < min_safe_s && car_s - my_car_s > -min_safe_s)) {
+              } else if (check_car_lane > lane && fabs(check_car_s - car_s) < min_safe_s) {
                   has_car_right = true;
                   cout << "A car at right !" << endl;
               }
                 
           }
-
           
           if (has_car_ahead) {
               if (!has_car_left && lane > 0) {
@@ -191,7 +190,7 @@ int main() {
               
               double ref_x_prev = previous_path_x[previous_path_size - 2];
               double ref_y_prev = previous_path_y[previous_path_size - 2];
-              ref_yaw = atan2(ref_y-ref_y_prev, ref_x-ref_x_prev);
+              ref_yaw = atan2(ref_y - ref_y_prev, ref_x - ref_x_prev);
               
               points_x.push_back(ref_x_prev);
               points_x.push_back(ref_x);
